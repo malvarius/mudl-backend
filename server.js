@@ -17,5 +17,5 @@ app.use('/apiroutes',apiRoutes);
 
 
 app.listen(PORT, function () {   
-   console.log("Example app listening at port"+PORT, PORT)
+   console.log("Example app listening at port", PORT)
 })
