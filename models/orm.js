@@ -35,6 +35,18 @@ const orm = {
             cb(response);
         })
     },
+    getMantraFromID: (emotions_id,cb)=>{
+        connection.query('select * from mantras m left join emotions e on m.emotions_id = e.id where e.id=$1;',[emotions_id],function(err,response){
+            if(err) throw err;
+            cb(response);
+        })
+    },
+    getMantraNoID: (cb)=>{
+        connection.query('select * from mantras m left join emotions e on m.emotions_id = e.id where e.id is null;',function(err,response){
+            if(err) throw err;
+            cb(response);
+        })
+    }
     
 }
 
