@@ -46,6 +46,18 @@ router.get('/mantras/:mantra_id?', function (req, res) {
   
 })
 
+// route to add selected emotion to db
+
+router.get('/:user?/:emotion_id',(req,res)=>{
+  const emotion_id=req.params.emotion_id;
+  const user = req.params.user;
+  orm.logEmotion(user,emotion_id,(data)=>{
+    res.json(data.rows)
+  })
+
+
+})
+
 
 
 

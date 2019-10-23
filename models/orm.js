@@ -46,6 +46,12 @@ const orm = {
             if(err) throw err;
             cb(response);
         })
+    },
+    logEmotion :(user, emotion_id,cb)=>{
+        connection.query('insert into user_emotions (username, emotion_id) values($1,$2);',[user,emotion_id],function(err,response){
+            if(err) throw err;
+            cb(response);
+        }) 
     }
     
 }
