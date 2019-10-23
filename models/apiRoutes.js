@@ -33,29 +33,61 @@ router.get('/mood/:primary?/:secondary?', function (req, res) {
 
 // pass in emotions_id to get mantras associated
 router.get('/mantras/:mantra_id?', function (req, res) {
-  let mantra_id = req.params.mantra_id||null;
-  if(mantra_id){
+  let mantra_id = req.params.mantra_id || null;
+  if (mantra_id) {
     orm.getMantraFromID(mantra_id, (data) => {
       res.json(data.rows)
     });
-  }else{
-    orm.getMantraNoID((data)=>{
+  } else {
+    orm.getMantraNoID((data) => {
       res.json(data.rows)
     })
   }
-  
+
 })
 
 // route to add selected emotion to db
 
-router.get('/:user?/:emotion_id',(req,res)=>{
-  const emotion_id=req.params.emotion_id;
+router.get('/add/:user/:emotion_id', (req, res) => {
+  const emotion_id = req.params.emotion_id;
   const user = req.params.user;
-  orm.logEmotion(user,emotion_id,(data)=>{
+  orm.logEmotion(user, emotion_id, (data) => {
     res.json(data.rows)
   })
+})
+// route to grab user emotions logged over last 30 days
+//sums all of the general emotions chosen and hands it back as an object ot front end
+router.get('/info/:user', (req, res) => {
+  const user = req.params.user
+  orm.getUserEmotion(user, (data) => {
+    let angry = data.rows.filter((item) => {
+      return item.emotions_id < 25
+    })
+    let disgusted = data.rows.filter((item) => {
+      return (item.emotions_id > 24 && item.emotions_id < 37)
+    })
+    let sad = data.rows.filter((item) => {
+      return (item.emotions_id > 36 && item.emotions_id < 55)
+    })
+    let happy = data.rows.filter((item) => {
+      return (item.emotions_id > 54 && item.emotions_id < 79)
+    })
+    let surprised = data.rows.filter((item) => {
+      return (item.emotions_id > 78 && item.emotions_id < 91)
+    })
+    let fearful = data.rows.filter((item) => {
+      return (item.emotions_id > 90 && item.emotions_id < 109)
 
-
+    })
+    res.json({
+      angry: angry.length,
+      disgusted: disgusted.length,
+      sad: sad.length,
+      happy: happy.length,
+      surprised:surprised.length,
+      fearful:fearful.length
+    })
+  })
 })
 
 
