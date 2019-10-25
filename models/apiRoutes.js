@@ -53,7 +53,7 @@ router.get('/add/:user/:emotion_id', (req, res) => {
   const emotion_id = req.params.emotion_id;
   const user = req.params.user;
   orm.logEmotion(user, emotion_id, (data) => {
-    res.json(data.rows)
+    res.json("successful Add")
   })
 })
 // route to grab user emotions logged over last 30 days
