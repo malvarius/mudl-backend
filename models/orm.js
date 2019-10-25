@@ -35,14 +35,35 @@ const orm = {
             cb(response);
         })
     },
-    getMantraFromID: (emotions_id, cb) => {
-        connection.query('select * from mantras m left join emotions e on m.emotions_id = e.id where e.id=$1;', [emotions_id], function (err, response) {
+    getAdviceByID: (emotions_id, cb) => {
+        connection.query('select * from advice a left join emotions e on a.emotions_id = e.id where e.id=$1;', [emotions_id], function (err, response) {
             if (err) throw err;
             cb(response);
         })
     },
-    getMantraNoID: (cb) => {
-        connection.query('select * from mantras m left join emotions e on m.emotions_id = e.id where e.id is null;', function (err, response) {
+    getMantraByID: (emotions_id, cb) => {
+        let upper;
+        let lower;
+        if (emotions_id < 25 && emotions_id >= 1) {
+            upper = 25
+            lower = 1
+        } else if (emotions_id < 37 && emotions_id >= 25) {
+            upper = 37
+            lower = 25
+        } else if (emotions_id < 55 && emotions_id >= 37) {
+            upper = 55
+            lower = 37
+        } else if (emotions_id < 79 && emotions_id >= 55) {
+            upper = 55
+            lower = 37
+        } else if (emotions_id < 91 && emotions_id >= 79) {
+            upper = 91
+            lower = 79
+        } else if (emotions_id < 109 && emotions_id >= 91) {
+            upper = 109
+            lower = 91
+        }
+        connection.query('select mantra from mantras where emotions_id >=$1 and emotions_id <$2 order by random() LIMIT 1;', [lower, upper], function (err, response) {
             if (err) throw err;
             cb(response);
         })
@@ -54,7 +75,7 @@ const orm = {
         })
     },
     getUserEmotion: (user, cb) => {
-        connection.query("select * from user_emotions where (log_date > current_date - interval '30' day) and users_id = $1",[user], function (err, response) {
+        connection.query("select * from user_emotions where (log_date > current_date - interval '30' day) and users_id = $1", [user], function (err, response) {
             if (err) throw err;
             cb(response);
         })

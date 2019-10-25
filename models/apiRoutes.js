@@ -33,16 +33,17 @@ router.get('/mood/:primary?/:secondary?', function (req, res) {
 
 // pass in emotions_id to get mantras associated
 router.get('/mantras/:mantra_id?', function (req, res) {
-  let mantra_id = req.params.mantra_id || null;
-  if (mantra_id) {
-    orm.getMantraFromID(mantra_id, (data) => {
-      res.json(data.rows)
-    });
-  } else {
-    orm.getMantraNoID((data) => {
-      res.json(data.rows)
-    })
-  }
+  let mantra_id = req.params.mantra_id
+  let object = {};
+  orm.getAdviceByID(mantra_id, (data) => {
+    object = data.rows[0]
+  });
+  orm.getMantraByID(mantra_id, (data) => {
+    object.mantra = data.rows[0].mantra
+    res.json(object)
+  })
+
+
 
 })
 
@@ -84,8 +85,8 @@ router.get('/info/:user', (req, res) => {
       disgusted: disgusted.length,
       sad: sad.length,
       happy: happy.length,
-      surprised:surprised.length,
-      fearful:fearful.length
+      surprised: surprised.length,
+      fearful: fearful.length
     })
   })
 })
