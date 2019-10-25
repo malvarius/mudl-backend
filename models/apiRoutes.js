@@ -36,15 +36,14 @@ router.get('/mantras/:mantra_id?', function (req, res) {
   let mantra_id = req.params.mantra_id
   let object = {};
   orm.getAdviceByID(mantra_id, (data) => {
-    object = data.rows[0]
+    let item = data.rows[0]||"no data"
+    object = item
   });
   orm.getMantraByID(mantra_id, (data) => {
-    object.mantra = data.rows[0].mantra
+    const item = data.rows && data.rows[0] && data.rows[0].mantra ? data.rows[0].mantra : "no data"
+    object.mantra = item
     res.json(object)
   })
-
-
-
 })
 
 // route to add selected emotion to db
