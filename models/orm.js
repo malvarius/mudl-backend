@@ -24,7 +24,7 @@ const orm = {
         })
     },
     getSecondaryEmotions: (primary, cb) => {
-        connection.query('select distinct secondary_emotion, secondary_emotion_def from emotions where primary_emotion = $1', [primary], function (err, response) {
+        connection.query('select distinct secondary_emotion, secondary_emotion_def, primary_emotion from emotions where primary_emotion = $1', [primary], function (err, response) {
             if (err) throw err;
             cb(response);
         })
